@@ -22,9 +22,8 @@ const option = {
 };
 
 const mongoURI = process.env.MONGODB_URI;
-console.log(mongoURI);
 mongoose.connect(mongoURI, option).then(function () {
-  console.log("Masuk");
+  console.log("Connected to MongoDB");
 }, function (err) {
   console.log(err);
 });
@@ -57,7 +56,6 @@ app.get('/api', (req, res) => {
 app.use(function (req, res) {
   res.status(404).send({ url: req.originalUrl + ' not found' })
 });
-
 
 // start server
 app.listen(port);

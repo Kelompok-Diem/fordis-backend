@@ -10,7 +10,10 @@ var express = require('express'),
 
   User = require('./api/models/userModel.js'),
   bodyParser = require('body-parser'),
-  jsonwebtoken = require("jsonwebtoken");
+  jsonwebtoken = require("jsonwebtoken"),
+  cors = require('cors');
+
+app.use(cors());
 
 // connect to MongoDB Atlas
 const mongoose = require('mongoose');

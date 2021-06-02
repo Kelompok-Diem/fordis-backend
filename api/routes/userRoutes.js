@@ -6,6 +6,6 @@ module.exports = function (app) {
         .post(userHandlers.loginRequired, userHandlers.profile);
     app.route('/api/auth/register')
         .post(userHandlers.register);
-    app.route('/api/auth/sign_in')
-        .post(userHandlers.sign_in);
+    app.route('/api/auth/login')
+        .post(userHandlers.login);
 };

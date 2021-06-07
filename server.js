@@ -10,7 +10,10 @@ var express = require('express'),
 
   User = require('./api/models/userModel.js'),
   bodyParser = require('body-parser'),
-  jsonwebtoken = require("jsonwebtoken");
+  jsonwebtoken = require("jsonwebtoken"),
+  cors = require('cors');
+
+app.use(cors());
 
 // connect to MongoDB Atlas
 const mongoose = require('mongoose');
@@ -22,9 +25,8 @@ const option = {
 };
 
 const mongoURI = process.env.MONGODB_URI;
-console.log(mongoURI);
 mongoose.connect(mongoURI, option).then(function () {
-  console.log("Masuk");
+  console.log("Connected to MongoDB");
 }, function (err) {
   console.log(err);
 });
@@ -57,7 +59,6 @@ app.get('/api', (req, res) => {
 app.use(function (req, res) {
   res.status(404).send({ url: req.originalUrl + ' not found' })
 });
-
 
 // start server
 app.listen(port);

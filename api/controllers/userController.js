@@ -20,7 +20,7 @@ exports.register = function (req, res) {
   });
 };
 
-exports.sign_in = function (req, res) {
+exports.login = function (req, res) {
   User.findOne({
     email: req.body.email
   }, function (err, user) {

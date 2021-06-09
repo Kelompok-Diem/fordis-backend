@@ -9,6 +9,7 @@ var express = require('express'),
   port = process.env.PORT || 3000,
 
   User = require('./api/models/userModel.js'),
+  Post = require('./api/models/postModel.js'),
   bodyParser = require('body-parser'),
   jsonwebtoken = require("jsonwebtoken"),
   cors = require('cors');
@@ -33,8 +34,8 @@ mongoose.connect(mongoURI, option).then(function () {
 
 
 // connect to routes
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(function (req, res, next) {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
@@ -49,8 +50,11 @@ app.use(function (req, res, next) {
   }
 });
 
-var routes = require('./api/routes/userRoutes.js');
-routes(app);
+// var userRoutes = require('./api/routes/userRoutes.js');
+// routes(app);
+
+require('./api/routes/userRoutes.js')(app);
+require('./api/routes/postRoutes.js')(app);
 
 app.get('/api', (req, res) => {
   res.send('Hello World!');

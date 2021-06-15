@@ -10,28 +10,17 @@ var express = require('express'),
 
   User = require('./api/models/userModel.js'),
   Post = require('./api/models/postModel.js'),
-  bodyParser = require('body-parser'),
   jsonwebtoken = require("jsonwebtoken"),
   cors = require('cors');
 
 app.use(cors());
 
 // connect to MongoDB Atlas
-const mongoose = require('mongoose');
-const option = {
-  socketTimeoutMS: 30000,
-  keepAlive: true,
-  reconnectTries: 30000,
-  useNewUrlParser: true
-};
+const dbo = require("./db/conn");
 
-const mongoURI = process.env.MONGODB_URI;
-mongoose.connect(mongoURI, option).then(function () {
-  console.log("Connected to MongoDB");
-}, function (err) {
-  console.log(err);
+dbo.connectToServer(function (err) {
+  if (err) console.error(err);
 });
-
 
 // connect to routes
 app.use(express.urlencoded({ extended: true }));
@@ -50,11 +39,8 @@ app.use(function (req, res, next) {
   }
 });
 
-// var userRoutes = require('./api/routes/userRoutes.js');
-// routes(app);
-
 require('./api/routes/userRoutes.js')(app);
-require('./api/routes/postRoutes.js')(app);
+// require('./api/routes/postRoutes.js')(app);
 
 app.get('/api', (req, res) => {
   res.send('Hello World!');

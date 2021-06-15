@@ -1,36 +1,28 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-  bcrypt = require('bcrypt'),
-  Schema = mongoose.Schema;
+var bcrypt = require('bcrypt'),
+  dbo = require('../../db/conn');
 
-/**
- * User Schema
- */
-var UserSchema = new Schema({
-  fullName: {
-    type: String,
-    trim: true,
-    required: true
+module.exports = {
+  createNewUser: function(user) {
+    let newUser = user;
+    newUser.hash_password = bcrypt.hashSync(user.password, 10);
+
+    delete newUser.password;
+
+    return newUser;
   },
-  email: {
-    type: String,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    required: true
+
+  comparePassword: function(password, hash_password) {
+    return bcrypt.compareSync(password, hash_password);
   },
-  hash_password: {
-    type: String
-  },
-  created: {
-    type: Date,
-    default: Date.now
+
+  connectDb: function() {
+    let db = dbo.getDb();
+    if (db === undefined) {
+      return null;
+    }
+
+    return db.collection('users');
   }
-});
-
-UserSchema.methods.comparePassword = function (password) {
-  return bcrypt.compareSync(password, this.hash_password);
-};
-
-mongoose.model('User', UserSchema);
+}

@@ -1,24 +1,27 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  ObjectId = mongoose.Schema.Types.ObjectId;
+var dbo = require('../../db/conn');
 
-var PostSchema = new Schema({
-  user_id: {
-    type: ObjectId,
-  },
-  title: {
-    type: String,
-    required: true
-  },
-  content: {
-    type: String,
-  },
-  date_created: {
-    type: Date,
-    default: Date.now
-  },
-})
+module.exports = {
+  createNewPost: function(post, user) {
+    const newPost = {
+      title: post.title,
+      content: post.content,
+      user_id: user._id,
+      date_created: new Date(),
+      is_active: true
+    }
 
-mongoose.model('Post', PostSchema);
+    return newPost;
+  },
+
+  connectDb: function() {
+    let db = dbo.getDb();
+
+    if (db === undefined) {
+      return null;
+    }
+
+    return db.collection('posts');
+  }
+}

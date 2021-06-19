@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
 });
 
 require('./api/routes/userRoutes.js')(app);
-// require('./api/routes/postRoutes.js')(app);
+require('./api/routes/postRoutes.js')(app);
 
 app.get('/api', (req, res) => {
   res.send('Hello World!');

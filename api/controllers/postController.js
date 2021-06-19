@@ -1,20 +1,22 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-  Post = mongoose.model('Post');
+var postModel = require('../models/postModel');
 
 exports.createPost = function(req, res) {
   if (req.user) {
-    var newPost = new Post(req.body);
-    newPost.user_id = req.user._id;
+    let db_connect = postModel.connectDb();
 
-    newPost.save(function(err, post) {
+    var newPost = postModel.createNewPost(req.body, req.user);
+
+    db_connect.insertOne(newPost, function(err, post) {
       if (err) {
         return res.status(400).send({
           message:err
         })
       } else {
-        return res.json(post);
+        return res.status(200).send({
+          message: "Post created successfully"
+        });
       }
     })
   } else {
@@ -23,13 +25,15 @@ exports.createPost = function(req, res) {
 }
 
 exports.getAllPosts = function(req, res) {
-  Post.find({}, function(err, post) {
+  let db_connect = postModel.connectDb();
+
+  db_connect.find({ is_active: true }).toArray(function(err, post) {
     if (err) {
       return res.status(400).send({
         message:err
       })
     } else {
-      return res.json(post);
+      return res.status(200).send(post);
     }
   })
 }

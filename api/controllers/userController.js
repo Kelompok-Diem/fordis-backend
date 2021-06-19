@@ -12,11 +12,9 @@ exports.register = function (req, res) {
         message: err
       });
     } else {
-      let result = user.ops[0];
-
-      delete result.hash_password;
-
-      return res.json(result);
+      return res.status(200).send({
+        message: "User registered successfully"
+      });
     }
   });
 };
@@ -43,7 +41,6 @@ exports.loginRequired = function (req, res, next) {
   if (req.user) {
     next();
   } else {
-
     return res.status(401).json({ message: 'Unauthorized user!!' });
   }
 };

@@ -1,11 +1,12 @@
 'use strict';
+
 module.exports = function (app) {
     var userHandlers = require('../controllers/userController.js');
-    // todoList Routes
-    app.route('/api/profile')
-        .post(userHandlers.loginRequired, userHandlers.profile);
-    app.route('/api/auth/register')
+
+    app.route('/profile')
+        .get(userHandlers.loginRequired, userHandlers.profile);
+    app.route('/auth/register')
         .post(userHandlers.register);
-    app.route('/api/auth/login')
+    app.route('/auth/login')
         .post(userHandlers.login);
 };

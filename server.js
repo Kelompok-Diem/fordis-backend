@@ -10,6 +10,7 @@ var express = require('express'),
 
   User = require('./api/models/userModel.js'),
   Post = require('./api/models/postModel.js'),
+  Comment = require('./api/models/commentModel.js'),
   jsonwebtoken = require("jsonwebtoken"),
   cors = require('cors');
 
@@ -41,6 +42,7 @@ app.use(function (req, res, next) {
 
 require('./api/routes/userRoutes.js')(app);
 require('./api/routes/postRoutes.js')(app);
+require('./api/routes/commentRoutes.js')(app);
 
 app.get('/api', (req, res) => {
   res.send('Hello World!');

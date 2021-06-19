@@ -5,5 +5,7 @@ module.exports = function (app) {
 
     app.route('/post')
         .post(userHandlers.loginRequired, postHandlers.createPost)
-        .get(postHandlers.getAllPosts)
+        .get(postHandlers.getAllPosts);
+    app.route('/post/:id')
+        .get(postHandlers.getPostById);
 };

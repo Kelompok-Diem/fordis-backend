@@ -1,6 +1,7 @@
 'use strict';
 
-var postModel = require('../models/postModel');
+var postModel = require('../models/postModel'),
+  { ObjectID } = require('mongodb');
 
 exports.createPost = function(req, res) {
   if (req.user) {
@@ -35,5 +36,19 @@ exports.getAllPosts = function(req, res) {
     } else {
       return res.status(200).send(post);
     }
+  })
+}
+
+exports.getPostById = function(req, res) {
+  let db_connect = postModel.connectDb();
+
+  db_connect.findOne({ _id: new ObjectID(req.params.id) }, function(err, post) {
+    if (err) {
+      return res.status(400).send({
+        message:err
+      })
+    }
+
+    return res.status(200).send(post);
   })
 }

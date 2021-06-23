@@ -11,4 +11,6 @@ module.exports = function (app) {
         .get(postHandlers.getPostById);
     app.route('/post/vote/:type/:id')
         .put(userHandlers.loginRequired, postHandlers.vote);
+    app.route('/post/share/:id')
+        .put(postHandlers.share);
 };

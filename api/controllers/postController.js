@@ -104,7 +104,7 @@ exports.share = function (req, res) {
   let db_connect = postModel.connectDb();
   const query = { _id: new ObjectID(req.params.id) };
   const new_values = { $inc: { share_count: 1 } };
-
+  
   db_connect.updateOne(query, new_values, function (err, post) {
     if (err) {
       return res.status(400).send({ message: err });
@@ -112,4 +112,29 @@ exports.share = function (req, res) {
 
     return res.status(200).send({ message: 'Share incremented' })
   });
+}
+
+exports.deactivatePost = async function (req, res) {
+  if (req.user) {
+    let db_connect = postModel.connectDb();
+    const query = { _id: new ObjectID(req.params.id) };
+    const new_values = { $set: { is_active: false } };
+
+    let post = await db_connect.findOne({ _id: new ObjectID(req.params.id) });
+    if (post.user_id !== req.user._id) {
+      return res.status(400).send({ message: "Not authorized" });
+    }
+
+    db_connect.updateOne(query, new_values, function (err, post) {
+      if (err) {
+        return res.status(400).send({ message: err });
+      }
+  
+      return res.status(200).send({ message: 'Post deactivated' })
+    });  
+  } else {
+    return res.status(401).send({ message: 'Invalid token' });
+  }
+  
+  
 }

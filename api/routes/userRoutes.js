@@ -10,5 +10,5 @@ module.exports = function (app) {
     app.route('/auth/login')
         .post(userHandlers.login);
     app.route('/auth/update')
-        .post(userHandlers.loginRequired, userHandlers.update);
+        .put(userHandlers.loginRequired, userHandlers.update);
 };

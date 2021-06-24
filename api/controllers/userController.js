@@ -58,7 +58,7 @@ exports.profile = function (req, res, next) {
 exports.update = function (req, res) {
   if (req.user) {
     let db_connect = userModel.connectDb();
-    let query = { _id: new ObjectID(req.user.id) };
+    let query = { _id: new ObjectID(req.user._id) };
     let values = {
       $set: userModel.updateuser(req.body)
     };

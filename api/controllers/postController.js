@@ -22,6 +22,7 @@ exports.createPost = function(req, res) {
     })
   } else {
     return res.status(401).json({ message: 'Invalid token' });
+    // ubah kaya register
   }
 }
 

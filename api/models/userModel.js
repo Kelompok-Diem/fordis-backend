@@ -13,6 +13,12 @@ module.exports = {
     return newUser;
   },
 
+  updateuser : function(user){
+    return {
+      full_name: user.full_name
+    } 
+  },
+  
   comparePassword: function(password, hash_password) {
     return bcrypt.compareSync(password, hash_password);
   },

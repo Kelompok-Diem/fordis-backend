@@ -9,4 +9,6 @@ module.exports = function (app) {
         .post(userHandlers.register);
     app.route('/auth/login')
         .post(userHandlers.login);
+    app.route('/auth/update')
+        .post(userHandlers.loginRequired, userHandlers.update);
 };

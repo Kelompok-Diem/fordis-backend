@@ -19,6 +19,13 @@ module.exports = {
     return newPost;
   },
 
+  updatepost : function(post){
+    return {
+      title: post.title,
+      content: post.content
+    } 
+  },
+
   connectDb: function() {
     let db = dbo.getDb();
 

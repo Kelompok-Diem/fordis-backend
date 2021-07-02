@@ -9,7 +9,10 @@ module.exports = {
       content: post.content,
       user_id: user._id,
       date_created: new Date(),
-      is_active: true
+      is_active: true,
+      upvotes: [],
+      downvotes: [],
+      votes: 0,
     }
 
     return newPost;

@@ -9,4 +9,6 @@ module.exports = function (app) {
         .get(postHandlers.getAllPosts);
     app.route('/post/:id')
         .get(postHandlers.getPostById);
+    app.route('/post/vote/:type/:id')
+        .put(userHandlers.loginRequired, postHandlers.vote);
 };

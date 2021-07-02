@@ -13,4 +13,6 @@ module.exports = function (app) {
         .put(userHandlers.loginRequired, postHandlers.vote);
     app.route('/post/share/:id')
         .put(postHandlers.share);
+    app.route('/post/deactivate/:id')
+        .put(postHandlers.deactivatePost);    
 };

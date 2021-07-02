@@ -13,6 +13,7 @@ module.exports = {
       upvotes: [],
       downvotes: [],
       votes: 0,
+      share_count: 0,
     }
 
     return newPost;

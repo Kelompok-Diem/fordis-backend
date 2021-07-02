@@ -100,3 +100,17 @@ exports.vote = async function (req, res) {
     return res.status(401).send({ message: 'Invalid token' });
   }
 }
+
+exports.share = function (req, res) {
+  let db_connect = postModel.connectDb();
+  const query = { _id: new ObjectID(req.params.id) };
+  const new_values = { $inc: { share_count: 1 } };
+
+  db_connect.updateOne(query, new_values, function (err, post) {
+    if (err) {
+      return res.status(400).send({ message: err });
+    }
+
+    return res.status(200).send({ message: 'Share incremented' })
+  });
+}

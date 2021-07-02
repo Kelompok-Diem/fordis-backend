@@ -15,6 +15,10 @@ module.exports = {
     return newComment;
   },
 
+  updateComment: function(comment){
+    return{content: comment.content}
+  },
+
   connectDb: function() {
     let db = dbo.getDb();
 

@@ -14,5 +14,8 @@ module.exports = function (app) {
     app.route('/post/share/:id')
         .put(postHandlers.share);
     app.route('/post/deactivate/:id')
-        .put(postHandlers.deactivatePost);    
+        .put(postHandlers.deactivatePost); 
+    app.route('/post/update/:id')
+        .put(postHandlers.update);    
+    
 };

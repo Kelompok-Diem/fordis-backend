@@ -8,4 +8,6 @@ module.exports = function (app) {
         .post(userHandlers.loginRequired, commentHandlers.createComment);
     app.route('/comment/:post_id')
         .get(commentHandlers.getCommentsByPostId);
+    app.route('/comment/update/:id')
+        .put(commentHandlers.update); 
 };

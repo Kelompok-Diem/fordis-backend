@@ -138,3 +138,27 @@ exports.deactivatePost = async function (req, res) {
     return res.status(401).send({ message: 'Invalid token' });
   }
 }
+
+exports.update = async function (req, res) {
+  if (req.user) {
+    let db_connect = postModel.connectDb();
+
+    let post = await db_connect.findOne({ _id: new ObjectID(req.params.id) });
+    if (post.user_id !== req.user._id) {
+      return res.status(400).send({ message: "Not authorized" });
+    }
+
+    const query = { _id: new ObjectID(req.params.id) };
+    const new_values = { $set: postModel.updatepost(req.body)};
+
+    db_connect.updateOne(query, new_values, function (err, post) {
+      if (err) {
+        return res.status(400).send({ message: err });
+      }
+
+      return res.status(200).send({ message: 'Post Update' })
+    });
+  } else {
+    return res.status(401).send({ message: 'Invalid token' });
+  }
+}

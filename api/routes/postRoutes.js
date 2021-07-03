@@ -3,9 +3,10 @@
 module.exports = function (app) {
     var userHandlers = require('../controllers/userController.js');
     var postHandlers = require('../controllers/postController.js');
+    var imageHandlers = require('../controllers/imageController.js');
 
     app.route('/post')
-        .post(userHandlers.loginRequired, postHandlers.createPost)
+        .post(userHandlers.loginRequired, imageHandlers.upload.array('images'), postHandlers.createPost)
         .get(postHandlers.getAllPosts);
     app.route('/post/:id')
         .get(postHandlers.getPostById);
@@ -14,8 +15,7 @@ module.exports = function (app) {
     app.route('/post/share/:id')
         .put(postHandlers.share);
     app.route('/post/deactivate/:id')
-        .put(postHandlers.deactivatePost); 
+        .put(postHandlers.deactivatePost);
     app.route('/post/update/:id')
-        .put(postHandlers.update);    
-    
+        .put(postHandlers.update);
 };

@@ -3,7 +3,7 @@
 var dbo = require('../../db/conn');
 
 module.exports = {
-  createNewPost: function(post, user) {
+  createNewPost: function(post, user, images) {
     const newPost = {
       title: post.title,
       content: post.content,
@@ -14,6 +14,9 @@ module.exports = {
       downvotes: [],
       votes: 0,
       share_count: 0,
+      images: images.map((value) => {
+        return (value.filename);
+      }),
     }
 
     return newPost;
@@ -23,7 +26,7 @@ module.exports = {
     return {
       title: post.title,
       content: post.content
-    } 
+    }
   },
 
   connectDb: function() {

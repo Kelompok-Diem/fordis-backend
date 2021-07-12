@@ -10,4 +10,6 @@ module.exports = function (app) {
         .get(commentHandlers.getCommentsByPostId);
     app.route('/comment/update/:id')
         .put(commentHandlers.update); 
+    app.route('/comment/delete/:id')
+        .delete(commentHandlers.delete)
 };

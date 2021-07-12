@@ -144,6 +144,7 @@ exports.update = async function (req, res) {
     let db_connect = postModel.connectDb();
 
     let post = await db_connect.findOne({ _id: new ObjectID(req.params.id) });
+
     if (post.user_id !== req.user._id) {
       return res.status(400).send({ message: "Not authorized" });
     }
@@ -159,6 +160,30 @@ exports.update = async function (req, res) {
       return res.status(200).send({ message: 'Post Update' })
     });
   } else {
+    return res.status(401).send({ message: 'Invalid token' });
+  }
+}
+
+exports.delete = async function (req, res){
+  console.log(req.user)
+  if (req.user){
+    let db_connect = postModel.connectDb();
+
+    let post = await db_connect.findOne({ _id: new ObjectID(req.params.id) });
+    let user = toString(req.user._id)
+    let postuser = toString(post.user_id)
+    if ( user !== postuser && !req.user.is_admin && !req.user.is_moderator) {
+      return res.status(400).send({ message: "Not authorized" });
+    }
+    const query = { _id: new ObjectID(req.params.id) };
+    db_connect.deleteOne(query,function (err, post){
+      if (err) {
+        return res.status(400).send({ message: err });
+      }
+
+    return res.status(200).send({ message: 'Post Deleted' })
+    });
+  }else {
     return res.status(401).send({ message: 'Invalid token' });
   }
 }

@@ -34,7 +34,7 @@ exports.login = function (req, res) {
       return res.status(401).json({ message: 'Authentication failed. Invalid user or password.' });
     }
 
-    return res.json({ token: jwt.sign({ email: user.email, full_name: user.full_name, _id: user._id }, 'RESTFULAPIs') });
+    return res.json({ token: jwt.sign({ email: user.email, full_name: user.full_name, _id: user._id, is_admin: user.is_admin, is_moderator: user.is_moderator}, 'RESTFULAPIs') });
   });
 };
 
@@ -73,3 +73,43 @@ exports.update = function (req, res) {
     return res.status(401).send({ message: 'Invalid token' });
   }
 };
+
+exports.moderator = async function(req, res){
+  if(req.user){
+    let db_connect = userModel.connectDb();
+    let user = await db_connect.findOne({ _id: new ObjectID(req.params.id) });
+    const values = { $set: { is_moderator: true } };
+    if(!req.user.is_admin){
+      return res.status(400).send({message : "You are not admin"})
+    }
+    db_connect.updateOne(user,values,function(err, user){
+      if (err){
+        return req.status(400).send({message: err});
+      }
+
+      return res.status(200).send({message:'Now User Is Moderator'})
+    });
+  }else{
+    return res.status(401).send({message: 'Invalid Token'});
+  }
+}
+
+exports.delete = async function (req, res){
+  if (req.user){
+    let db_connect = userModel.connectDb();
+
+    if (!req.user.is_admin && !req.user.is_moderator) {
+      return res.status(400).send({ message: "Not authorized" });
+    }
+    const query = { _id: new ObjectID(req.params.id) };
+    db_connect.deleteOne(query,function (err, post){
+      if (err) {
+        return res.status(400).send({ message: err });
+      }
+
+    return res.status(200).send({ message: 'User Deleted' })
+    });
+  }else {
+    return res.status(401).send({ message: 'Invalid token' });
+  }
+}

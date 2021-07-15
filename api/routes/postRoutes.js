@@ -17,5 +17,7 @@ module.exports = function (app) {
     app.route('/post/deactivate/:id')
         .put(postHandlers.deactivatePost);
     app.route('/post/update/:id')
-        .put(postHandlers.update);
+        .put(postHandlers.update);    
+    app.route('/post/delete/:id')
+        .delete(postHandlers.delete);
 };

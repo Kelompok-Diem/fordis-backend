@@ -14,5 +14,7 @@ module.exports = function (app) {
     app.route('/comment/:post_id')
         .get(commentHandlers.getCommentsByPostId);
     app.route('/comment/update/:id')
-        .put(commentHandlers.update);
+        .put(commentHandlers.update); 
+    app.route('/comment/delete/:id')
+        .delete(commentHandlers.delete);
 };

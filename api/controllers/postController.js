@@ -28,7 +28,7 @@ exports.createPost = function (req, res) {
 exports.getAllPosts = function (req, res) {
   let db_connect = postModel.connectDb();
 
-  db_connect.find({}).toArray(function (err, post) {
+  db_connect.find({}).sort({ date_created: -1 }).toArray(function (err, post) {
     if (err) {
       return res.status(400).send({
         message: err

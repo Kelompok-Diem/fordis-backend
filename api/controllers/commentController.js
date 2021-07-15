@@ -38,6 +38,54 @@ exports.getCommentsByPostId = function(req, res) {
   })
 }
 
+exports.vote = async function (req, res) {
+  if (req.user) {
+    try {
+      let db_connect = commentModel.connectDb();
+
+      let comment = await db_connect.findOne({ _id: new ObjectID(req.params.id) });
+
+      const type = parseInt(req.params.type);
+
+      const target = (type === 1 ? "up" : "down") + "votes";
+      const source = (type === 1 ? "down" : "up") + "votes";
+
+      if (comment[target].find((user_id) => { return user_id === req.user._id })) {
+        comment[target] = comment[target].filter((user_id) => {
+          return (user_id !== req.user._id);
+        })
+
+        comment.votes -= type;
+      } else {
+        if (comment[source].find((user_id) => { return user_id === req.user._id })) {
+          comment[source] = comment[source].filter((user_id) => {
+            return (user_id !== req.user._id);
+          })
+          comment.votes += type;
+        }
+
+        comment[target].push(req.user._id);
+        comment.votes += type;
+      }
+
+      const query = { _id: new ObjectID(req.params.id) };
+      const new_values = { $set: comment };
+
+      db_connect.updateOne(query, new_values, function (err, comment) {
+        if (err) {
+          return res.status(400).send({ message: err });
+        }
+
+        return res.status(200).send({ message: 'Vote submitted' })
+      })
+    } catch (err) {
+      return res.status(400).send({ message: err })
+    }
+  } else {
+    return res.status(401).send({ message: 'Invalid token' });
+  }
+}
+
 exports.update = async function (req, res) {
   if (req.user) {
     let db_connect = commentModel.connectDb();

@@ -3,11 +3,16 @@
 module.exports = function (app) {
     var userHandlers = require('../controllers/userController.js');
     var commentHandlers = require('../controllers/commentController.js');
+    var imageHandlers = require('../controllers/imageController.js');
 
     app.route('/comment')
-        .post(userHandlers.loginRequired, commentHandlers.createComment);
+        .post(
+            userHandlers.loginRequired,
+            imageHandlers.upload.array('images'),
+            commentHandlers.createComment
+        );
     app.route('/comment/:post_id')
         .get(commentHandlers.getCommentsByPostId);
     app.route('/comment/update/:id')
-        .put(commentHandlers.update); 
+        .put(commentHandlers.update);
 };

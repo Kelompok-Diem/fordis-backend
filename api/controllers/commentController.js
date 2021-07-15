@@ -6,7 +6,7 @@ var commentModel = require('../models/commentModel');
 exports.createComment = function (req, res) {
   if (req.user) {
     let db_connect = commentModel.connectDb();
-    let newComment = commentModel.createNewComment(req.body, req.user);
+    let newComment = commentModel.createNewComment(req.body, req.user, req.files);
 
     db_connect.insertOne(newComment, function (err, comment) {
       if (err) {

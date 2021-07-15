@@ -7,7 +7,7 @@ exports.createPost = function (req, res) {
   if (req.user) {
     let db_connect = postModel.connectDb();
 
-    var newPost = postModel.createNewPost(req.body, req.user);
+    var newPost = postModel.createNewPost(req.body, req.user, req.files);
 
     db_connect.insertOne(newPost, function (err, post) {
       if (err) {
@@ -22,7 +22,6 @@ exports.createPost = function (req, res) {
     })
   } else {
     return res.status(401).json({ message: 'Invalid token' });
-    // ubah kaya register
   }
 }
 

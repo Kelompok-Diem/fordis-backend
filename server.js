@@ -8,9 +8,6 @@ var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000,
 
-  User = require('./api/models/userModel.js'),
-  Post = require('./api/models/postModel.js'),
-  Comment = require('./api/models/commentModel.js'),
   jsonwebtoken = require("jsonwebtoken"),
   cors = require('cors');
 
@@ -43,10 +40,7 @@ app.use(function (req, res, next) {
 require('./api/routes/userRoutes.js')(app);
 require('./api/routes/postRoutes.js')(app);
 require('./api/routes/commentRoutes.js')(app);
-
-app.get('/api', (req, res) => {
-  res.send('Hello World!');
-})
+require('./api/routes/imageRoutes.js')(app);
 
 app.use(function (req, res) {
   res.status(404).send({ url: req.originalUrl + ' not found' })

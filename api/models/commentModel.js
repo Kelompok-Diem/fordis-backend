@@ -4,12 +4,15 @@ var dbo = require('../../db/conn'),
   { ObjectID } = require('mongodb');
 
 module.exports = {
-  createNewComment: function(comment, user) {
+  createNewComment: function(comment, user, images) {
     const newComment = {
       content: comment.content,
       user_id: new ObjectID(user._id),
       post_id: new ObjectID(comment.post_id),
       date_created: new Date(),
+      images: images.map((value) => {
+        return (value.filename)
+      })
     }
 
     return newComment;

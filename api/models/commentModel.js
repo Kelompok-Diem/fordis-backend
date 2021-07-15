@@ -10,6 +10,9 @@ module.exports = {
       user_id: new ObjectID(user._id),
       post_id: new ObjectID(comment.post_id),
       date_created: new Date(),
+      upvotes: [],
+      downvotes: [],
+      votes: 0,
       images: images.map((value) => {
         return (value.filename)
       })

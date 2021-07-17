@@ -34,6 +34,18 @@ module.exports = {
     return result;
   },
 
+  getUserInComment: function(user, comment) {
+    const result = {
+      is_author: user._id == comment.user_id,
+      is_admin: user.is_admin ? true: false,
+      is_moderator: user.is_moderator ? true : false,
+      upvoted: comment.upvotes.includes(user._id),
+      downvoted: comment.downvotes.includes(user._id),
+    }
+
+    return result;
+  },
+
   comparePassword: function(password, hash_password) {
     return bcrypt.compareSync(password, hash_password);
   },

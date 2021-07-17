@@ -3,6 +3,7 @@
 const { ObjectID } = require('mongodb');
 const commentModel = require('../models/commentModel');
 const postModel = require('../models/postModel');
+const userModel = require('../models/userModel');
 
 exports.createComment = function (req, res) {
   if (req.user) {
@@ -35,15 +36,28 @@ exports.createComment = function (req, res) {
   }
 }
 
-exports.getCommentsByPostId = function(req, res) {
+exports.getCommentsByPostId = async function(req, res) {
   let db_connect = commentModel.connectDb();
 
-  db_connect.find({ post_id: new ObjectID(req.params.post_id) }).toArray(function(err, comments) {
+  db_connect.find({ post_id: new ObjectID(req.params.post_id) }).toArray(async function(err, comments) {
     if (err) {
       return res.status(400).send({
         message: err
       })
     }
+
+    comments = await Promise.all(comments.map(async (comment) => {
+      const user_db_connect = userModel.connectDb();
+      const author = await user_db_connect.findOne({ _id: new ObjectID(comment.user_id) });
+
+      comment.author = author.full_name;
+
+      if (req.user) {
+        comment.user = userModel.getUserInComment(req.user, comment)
+      }
+
+      return comment;
+    }));
 
     return res.status(200).send(comments);
   })

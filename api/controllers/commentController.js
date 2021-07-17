@@ -1,7 +1,8 @@
 'use strict';
 
 const { ObjectID } = require('mongodb');
-var commentModel = require('../models/commentModel');
+const commentModel = require('../models/commentModel');
+const postModel = require('../models/postModel');
 
 exports.createComment = function (req, res) {
   if (req.user) {
@@ -14,6 +15,16 @@ exports.createComment = function (req, res) {
           message: err
         })
       }
+
+      const post_db_connect = postModel.connectDb();
+      const query = { _id: new ObjectID(req.body.post_id) };
+      const new_values = { $inc: { comment_count: 1 } };
+
+      post_db_connect.updateOne(query, new_values, function (err, post) {
+        if (err) {
+          return res.status(400).send({ message: err });
+        }
+      });
 
       return res.status(200).send({
         message: "Comment created successfully"
@@ -122,15 +133,26 @@ exports.delete = async function (req, res){
     if ( user !== commenttuser && !req.user.is_admin && !req.user.is_moderator) {
       return res.status(400).send({ message: "Not authorized" });
     }
+
     const query = { _id: new ObjectID(req.params.id) };
-    db_connect.deleteOne(query,function (err, post){
+    db_connect.deleteOne(query,function (err, response){
       if (err) {
         return res.status(400).send({ message: err });
       }
 
-    return res.status(200).send({ message: 'Comment Deleted' })
+      const post_db_connect = postModel.connectDb();
+      const query = { _id: new ObjectID(comment.post_id) };
+      const new_values = { $inc: { comment_count: -1 } };
+
+      post_db_connect.updateOne(query, new_values, function (err, post) {
+        if (err) {
+          return res.status(400).send({ message: err });
+        }
+      });
+
+      return res.status(200).send({ message: 'Comment Deleted' })
     });
-  }else {
+  } else {
     return res.status(401).send({ message: 'Invalid token' });
   }
 }

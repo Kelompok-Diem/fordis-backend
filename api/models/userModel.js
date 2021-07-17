@@ -9,17 +9,27 @@ module.exports = {
       full_name: user.full_name,
       email: user.email,
       hash_password: bcrypt.hashSync(user.password, 10),
+      gender: '',
+      role: '',
       is_admin: false,
       is_moderator: false,
+      photo: null,
     }
 
     return newUser;
   },
 
   updateuser : function(user){
-    return {
-      full_name: user.full_name
+    let updatedUser = {
+      full_name: user.full_name,
+      gender: user.gender,
+      role: user.role,
+      photo: null,
     }
+
+    updatedUser.hash_password = bcrypt.hashSync(user.password, 10);
+
+    return updatedUser;
   },
 
   getUserInPost: function(user, post) {

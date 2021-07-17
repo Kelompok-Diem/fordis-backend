@@ -117,13 +117,23 @@ exports.delete = async function (req, res){
 exports.getUser = function (req, res){
   let db_connect = userModel.connectDb();
 
-  db_connect.findOne({ _id: new ObjectID(req.params.id) }, function (err, user) {
+  db_connect.findOne({ _id: new ObjectID(req.params.id) }, function (err, profile) {
     if (err) {
       return res.status(400).send({
         message: err
       })
     }
 
-    return res.status(200).send(user);
+    delete profile.hash_password;
+
+    if (req.user) {
+      profile.user = {
+        is_owner: profile._id == req.user._id,
+        is_moderator: req.user.is_moderator,
+        is_admin: req.user.is_admin,
+      }
+    }
+
+    return res.status(200).send(profile);
   })
 }

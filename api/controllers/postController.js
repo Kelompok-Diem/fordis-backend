@@ -53,7 +53,10 @@ exports.getPostById = function (req, res) {
     const user_db_connect = userModel.connectDb();
     const author = await user_db_connect.findOne({ _id: new ObjectID(post.user_id) });
 
-    post.author = author.full_name;
+    post.author = {
+      full_name: author.full_name,
+      _id: author._id,
+    };
 
     if (req.user) {
       post.user = userModel.getUserInPost(req.user, post);

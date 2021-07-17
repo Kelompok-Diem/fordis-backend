@@ -50,7 +50,10 @@ exports.getCommentsByPostId = async function(req, res) {
       const user_db_connect = userModel.connectDb();
       const author = await user_db_connect.findOne({ _id: new ObjectID(comment.user_id) });
 
-      comment.author = author.full_name;
+      comment.author = {
+        full_name: author.full_name,
+        _id: author._id,
+      };
 
       if (req.user) {
         comment.user = userModel.getUserInComment(req.user, comment)

@@ -15,4 +15,6 @@ module.exports = function (app) {
         .put(userHandlers.loginRequired, userHandlers.moderator)
     app.route('/auth/delete/:id')
         .delete(userHandlers.delete)
+    app.route('/auth/:id')
+        .get(userHandlers.getUser)
 };

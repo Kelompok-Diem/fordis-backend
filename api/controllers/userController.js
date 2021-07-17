@@ -113,3 +113,17 @@ exports.delete = async function (req, res){
     return res.status(401).send({ message: 'Invalid token' });
   }
 }
+
+exports.getUser = function (req, res){
+  let db_connect = userModel.connectDb();
+
+  db_connect.findOne({ _id: new ObjectID(req.params.id) }, function (err, user) {
+    if (err) {
+      return res.status(400).send({
+        message: err
+      })
+    }
+
+    return res.status(200).send(user);
+  })
+}

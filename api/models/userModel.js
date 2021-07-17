@@ -27,7 +27,9 @@ module.exports = {
       photo: null,
     }
 
-    updatedUser.hash_password = bcrypt.hashSync(user.password, 10);
+    if (user.password) {
+      updatedUser.hash_password = bcrypt.hashSync(user.password, 10);
+    }
 
     return updatedUser;
   },

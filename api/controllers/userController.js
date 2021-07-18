@@ -60,7 +60,7 @@ exports.update = function (req, res) {
     let db_connect = userModel.connectDb();
     let query = { _id: new ObjectID(req.user._id) };
     let values = {
-      $set: userModel.updateuser(req.body)
+      $set: userModel.updateuser(req.body, req.file)
     };
 
     db_connect.updateOne(query, values, function (err, user) {

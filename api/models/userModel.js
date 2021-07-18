@@ -19,12 +19,12 @@ module.exports = {
     return newUser;
   },
 
-  updateuser : function(user){
+  updateuser : function(user, photo){
     let updatedUser = {
       full_name: user.full_name,
       gender: user.gender,
       role: user.role,
-      photo: null,
+      photo: photo.filename,
     }
 
     if (user.password) {

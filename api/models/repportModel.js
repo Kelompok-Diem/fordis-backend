@@ -3,16 +3,17 @@
 var dbo = require('../../db/conn');
 
 module.exports = {
-    createNewRepport: function(user_repport, user, repport) {
-        const newRepport = {
-          jenis_repport: user_repport.jenis_repport,
-          user_id: user._id,
-          yang_di_repport: repport,
-        }
-    
-        return newRepport;
-      },
-    connectDb: function() {
+  createNewRepport: function (report, user, target) {
+    const newRepport = {
+      reason: report.reason,
+      reporter_id: user._id,
+      [target.type + "_id"]: target.id,
+    }
+
+    return newRepport;
+  },
+
+  connectDb: function () {
     let db = dbo.getDb();
 
     if (db === undefined) {

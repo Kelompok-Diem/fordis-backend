@@ -8,5 +8,9 @@ module.exports = function (app) {
     app.route('/report/post/:id')
         .post(repportHandlers.post);
     app.route('/report/comment/:id')
-        .post(repportHandlers.comment)
+        .post(repportHandlers.comment);
+    app.route('/report')
+        .get(repportHandlers.getAll)
+    app.route('/report/delete/:id')
+        .delete(repportHandlers.delete)
 };

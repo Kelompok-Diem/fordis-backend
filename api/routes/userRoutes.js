@@ -2,6 +2,7 @@
 
 module.exports = function (app) {
     var userHandlers = require('../controllers/userController.js');
+    var imageHandlers = require('../controllers/imageController.js');
 
     app.route('/profile')
         .get(userHandlers.loginRequired, userHandlers.profile);
@@ -10,9 +11,15 @@ module.exports = function (app) {
     app.route('/auth/login')
         .post(userHandlers.login);
     app.route('/auth/update')
-        .put(userHandlers.loginRequired, userHandlers.update);
+        .put(
+            userHandlers.loginRequired,
+            imageHandlers.upload.single('photo'),
+            userHandlers.update
+        );
     app.route('/auth/moderator/:id')
         .put(userHandlers.loginRequired, userHandlers.moderator)
     app.route('/auth/delete/:id')
         .delete(userHandlers.delete)
+    app.route('/auth/:id')
+        .get(userHandlers.getUser)
 };

@@ -60,7 +60,7 @@ exports.update = function (req, res) {
     let db_connect = userModel.connectDb();
     let query = { _id: new ObjectID(req.user._id) };
     let values = {
-      $set: userModel.updateuser(req.body)
+      $set: userModel.updateuser(req.body, req.file)
     };
 
     db_connect.updateOne(query, values, function (err, user) {
@@ -112,4 +112,28 @@ exports.delete = async function (req, res){
   }else {
     return res.status(401).send({ message: 'Invalid token' });
   }
+}
+
+exports.getUser = function (req, res){
+  let db_connect = userModel.connectDb();
+
+  db_connect.findOne({ _id: new ObjectID(req.params.id) }, function (err, profile) {
+    if (err) {
+      return res.status(400).send({
+        message: err
+      })
+    }
+
+    delete profile.hash_password;
+
+    if (req.user) {
+      profile.user = {
+        is_owner: profile._id == req.user._id,
+        is_moderator: req.user.is_moderator,
+        is_admin: req.user.is_admin,
+      }
+    }
+
+    return res.status(200).send(profile);
+  })
 }

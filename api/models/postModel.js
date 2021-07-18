@@ -14,6 +14,7 @@ module.exports = {
       downvotes: [],
       votes: 0,
       share_count: 0,
+      comment_count: 0,
       images: images.map((value) => {
         return (value.filename);
       }),

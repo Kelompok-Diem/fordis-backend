@@ -66,6 +66,21 @@ exports.getCommentsByPostId = async function(req, res) {
   })
 }
 
+exports.getCommentById = async function(req, res) {
+  let db_connect = commentModel.connectDb();
+
+  db_connect.findOne({ _id: new ObjectID(req.params._id) }, function(err, comment) {
+    if (err) {
+      return res.status(400).send({
+        message: err
+      })
+    }
+
+    return res.status(200).send(comment);
+  })
+}
+
+
 exports.vote = async function (req, res) {
   if (req.user) {
     try {

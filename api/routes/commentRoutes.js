@@ -11,8 +11,10 @@ module.exports = function (app) {
             imageHandlers.upload.array('images'),
             commentHandlers.createComment
         );
-    app.route('/comment/:post_id')
+    app.route('/comments/:post_id')
         .get(commentHandlers.getCommentsByPostId);
+    app.route('/comment/:_id')
+        .get(commentHandlers.getCommentById);
     app.route('/comment/vote/:type/:id')
         .put(userHandlers.loginRequired, commentHandlers.vote);
     app.route('/comment/update/:id')

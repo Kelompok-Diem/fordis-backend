@@ -41,6 +41,7 @@ require('./api/routes/userRoutes.js')(app);
 require('./api/routes/postRoutes.js')(app);
 require('./api/routes/commentRoutes.js')(app);
 require('./api/routes/imageRoutes.js')(app);
+require('./api/routes/repportRoutes.js')(app);
 
 app.use(function (req, res) {
   res.status(404).send({ url: req.originalUrl + ' not found' })
